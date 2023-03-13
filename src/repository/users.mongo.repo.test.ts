@@ -32,21 +32,21 @@ describe('Given UsersMongoRepo', () => {
       expect(result).toEqual({ name: 'test' });
     });
 
-    /* Test('Then if the findById method resolve value to null, it should throw an Error', async () => {
-      const mockValue = null;
+    test('Then if the findById method resolve value to null, it should throw an Error', async () => {
+      const mockValue = undefined;
       (UserModel.findById as jest.Mock).mockImplementation(() => ({
-        populate: jest.fn().mockReturnValue({ name: 'test' }),
+        populate: jest.fn().mockReturnValue(mockValue),
       }));
-      expect(async () => repo.queryId('')).rejects.toThrow();
+      expect(async () => repo.queryId('1')).rejects.toThrow();
     });
   });
 
-  Describe('When I use search method', () => {
+  describe('When I use search method', () => {
     test('Then if it has an mock query object, it should return find resolved value', async () => {
       const mockValue = [{ id: '1' }];
-      (UserModel.find as jest.Mock).mockImplementation(() =>
-        mockPopulate(mockValue)
-      );
+      (UserModel.find as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockReturnValue(mockValue),
+      }));
 
       const mockTest = {
         key: 'email',
@@ -72,10 +72,13 @@ describe('Given UsersMongoRepo', () => {
 
   describe('When I use update method', () => {
     test('Then it should return the updated object', async () => {
-      (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue({
-        id: '1',
-        email: 'test',
-      });
+      (UserModel.findByIdAndUpdate as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockResolvedValue({
+          id: '1',
+          email: 'test',
+        }),
+      }));
+
       const result = await repo.update({
         id: '1',
         email: 'test2',
@@ -94,6 +97,15 @@ describe('Given UsersMongoRepo', () => {
           email: 'test',
         })
       ).rejects.toThrow();
-    }); */
+    });
+    test('Then it should throw an error if it has a different id', () => {
+      (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
+      expect(async () =>
+        repo.update({
+          id: '1',
+          email: 'test',
+        })
+      ).rejects.toThrowError();
+    });
   });
 });
