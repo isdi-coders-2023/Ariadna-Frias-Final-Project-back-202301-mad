@@ -10,7 +10,6 @@ describe('Given errorsMiddleware', () => {
   } as unknown as Response;
 
   const req = {} as unknown as Request;
-  const next = jest.fn();
 
   describe('When the error is a mongoose Cast Error', () => {
     test('Then status should be 400', () => {
