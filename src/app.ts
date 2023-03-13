@@ -16,8 +16,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors(corsOptions));
 
-// App.use('/users', usersRouter);
-
 app.get('/', (_req, resp) => {
   resp.json({
     info: 'Final project - FestivApp',
