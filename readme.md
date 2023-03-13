@@ -1,28 +1,72 @@
-# Week 7 - Challenge WeekEnd
+## Week 9 - Proyecto final
 
-## Red social
+Realiza una app fullstack MERN/MEAN con las siguientes características deseables:
 
-Crea una red social con React. La aplicación sólo se puede usar estando logueado (en abierto únicamente se puede ver login y registro), y una vez iniciada la sesión, el usuario puede ver un listado de todos los usuarios de la red.
+# Funcionalidad
 
-El usuario podrá editar su perfil.
+Listado de items
+Detalle de item (página aparte)
+Crear item (página aparte con un formulario e imagen obligatoria con un campo tipo file)
+Modificar item (mismo formulario que para crear)
+Borrar item (se tiene que poder borrar desde el listado)
+Paginación (puede ser el sistema clásico o un botón "Load more")
+Filtros (en el propio listado, que filtre sin cambiar de página)
+Login y registro de usuario
+Feedbacks al usuario
+Gestión de errores
+Firebase (o similar) para los archivos binarios (opcionalmente como backup)
 
-De cada usuario podrá ver su perfil, y podrá añadirlo como amigo o como enemigo (o cambiar entre ambos). Es decir, yo como usuario veo todos los demás usuarios, y además puedo tener una relación con algunos de ellos. Esa relación puede ser de amigo o de enemigo (recuerda: puede no haber relación).
+# Requisitos Frontend:
 
-En el listado de usuarios debe poder haber un filtro para enseñar:
+TypeScript
+React + gestión del estado con Redux / Angular
+moduleCSS / styled components
+tests unitarios / de componentes (opcionalmente snapshot)
+tests de integración
+README con información sobre la app
+100% coverage
+0 deuda técnica
+Lighthouse con métricas en verde
 
-todos los usuarios
-sólo los amigos
-sólo los enemigos
-El listado debe mostrar el total de usuarios (o amigos/enemigos si se ha usado el filtro).
+# Requisitos Backend:
 
-La red social consumirá los datos de una API desarrollada con Express, conectada a una base de datos en MongoDB. La validación de usuario se implementará mediante JWT.
+TypeScript
 
-## Extra
+Node + Express
 
-La API mantendrá un log de todas las relaciones, almacenado en un archivo de texto en el servidor. Cada vez que se cree o destruya una relación (de cualquiera de los dos tipos), se debe añadir una línea al log, con uno de estos tres formatos:
+auth con JWT
 
-New relationship: Luis & Marta (friends)
+tests unitarios
 
-New relationship: Luis & Marta (enemies)
+tests de endpoints (supertest)
 
-Removed relationship: Luis & Marta
+guardado de archivos binarios en disco duro / Firebase (o similar)
+
+optimización de imágenes (sharp)
+
+validación de requests con Joi
+
+README con información de uso y con endpoints (de cada endpoint método, url, body y response)
+
+100% coverage
+
+0 deuda técnica
+
+Colección de endpoints de Postman exportada como JSON (en el root del proyecto)
+
+# E2E:
+
+Proceso de login de usuario testado con Cypress
+
+# Check diario:
+
+daily meeting (qué tareas hice ayer, qué stoppers tuve, qué tareas haré hoy)
+informes de sonar sobre la rama principal, front y back
+= 80% cover
+
+# Challenge inicial
+
+Figma
+Responsabilidades de los componentes
+Rutas del backend
+Trello (backlog completo)#
