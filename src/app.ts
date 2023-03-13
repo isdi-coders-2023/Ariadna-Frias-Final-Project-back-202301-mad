@@ -2,8 +2,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import createDebug from 'debug';
 import express from 'express';
-import { usersRouter } from './router/users.router.js';
-import { errorsMiddleware } from './middlewares/errors.middleware.js';
 
 const debug = createDebug('FINPR:app');
 export const app = express();
@@ -16,8 +14,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.use('/users', usersRouter);
-
 app.get('/', (_req, resp) => {
   resp.json({
     info: 'Final project - FestivApp',
@@ -26,5 +22,3 @@ app.get('/', (_req, resp) => {
     },
   });
 });
-
-app.use(errorsMiddleware);
