@@ -32,17 +32,16 @@ describe('Given UsersMongoRepo', () => {
       expect(result).toEqual({ name: 'test' });
     });
 
-    /* test('Then if the findById method resolve value to null, it should throw an Error', async () => {
+    /* Test('Then if the findById method resolve value to null, it should throw an Error', async () => {
       const mockValue = null;
-      (UserModel.findById as jest.Mock).mockImplementation(() =>
-        mockPopulate(mockValue)
-      );
-
+      (UserModel.findById as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockReturnValue({ name: 'test' }),
+      }));
       expect(async () => repo.queryId('')).rejects.toThrow();
     });
   });
 
-  describe('When I use search method', () => {
+  Describe('When I use search method', () => {
     test('Then if it has an mock query object, it should return find resolved value', async () => {
       const mockValue = [{ id: '1' }];
       (UserModel.find as jest.Mock).mockImplementation(() =>
@@ -95,7 +94,6 @@ describe('Given UsersMongoRepo', () => {
           email: 'test',
         })
       ).rejects.toThrow();
-    });
-  }); */
+    }); */
   });
 });
