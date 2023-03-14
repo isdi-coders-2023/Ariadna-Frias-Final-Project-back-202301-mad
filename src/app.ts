@@ -4,6 +4,7 @@ import createDebug from 'debug';
 import express from 'express';
 
 import { errorsMiddleware } from './middlewares/errors.middleware.js';
+import { usersRouter } from './router/users.router.js';
 
 const debug = createDebug('FINPR:app');
 export const app = express();
@@ -15,6 +16,8 @@ const corsOptions = {
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors(corsOptions));
+
+app.use('/users', usersRouter);
 
 app.get('/', (_req, resp) => {
   resp.json({
