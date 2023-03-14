@@ -21,6 +21,7 @@ app.get('/', (_req, resp) => {
     info: 'Final project - FestivApp',
     endpoints: {
       users: '/users',
+      festivals: '/festivals',
     },
   });
 });
