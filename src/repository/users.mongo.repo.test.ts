@@ -98,14 +98,19 @@ describe('Given UsersMongoRepo', () => {
         })
       ).rejects.toThrow();
     });
-    test('Then it should throw an error if it has a different id', () => {
+    test('Then it should throw an error if it has a different id', async () => {
       (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
       expect(async () =>
         repo.update({
-          id: '1',
-          email: 'test',
+          email: '',
         })
       ).rejects.toThrowError();
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
+    });
+    test('Then it should throw an error if it has a different id', async () => {
+      (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue('');
+      expect(async () => repo.update({})).rejects.toThrow();
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
     });
   });
 });
