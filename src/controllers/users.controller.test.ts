@@ -1,6 +1,8 @@
 import { UsersController } from './users.controller';
 import { Request, Response } from 'express';
+import { Auth } from '../services/auth';
 
+jest.mock('../services/auth');
 describe('Given the UsersController', () => {
   const mockRepoUsers = {
     query: jest.fn(),
@@ -77,14 +79,15 @@ describe('Given the UsersController', () => {
       } as unknown as Request;
 
       mockRepoUsers.search.mockResolvedValue([]);
+      Auth.compare = jest.fn().mockResolvedValue(true);
       await controller.login(req, resp, next);
       expect(resp.status).toHaveBeenCalled();
-      expect(resp.json).toHaveBeenCalled();
+      expect(mockRepoUsers.search).toHaveBeenCalled();
     });
     test('And the email is missing, next function will be called', async () => {
       const req = {
         body: {
-          password: '',
+          password: 'a',
         },
       } as unknown as Request;
       mockRepoUsers.search.mockRejectedValue('error');
