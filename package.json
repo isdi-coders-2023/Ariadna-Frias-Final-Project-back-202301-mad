@@ -10,7 +10,7 @@
     "build": "tsc -w",
     "build:prod": "tsc",
     "test": "jest --watchAll --coverage",
-    "test:prod": "jest --watchAll --coverage --watchAll=false",
+    "test:prod": "jest --watchAll --coverage --watchAll=false --passWithNoTests",
     "copy:public": "copyfiles -u 1 src/public/**/*.* dist"
   },
   "keywords": [
