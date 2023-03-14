@@ -72,7 +72,7 @@ describe('Given the UsersController', () => {
       const req = {
         body: {
           email: 'test4',
-          passwd: 'p',
+          password: 'p',
         },
       } as unknown as Request;
 
@@ -84,7 +84,7 @@ describe('Given the UsersController', () => {
     test('And the email is missing, next function will be called', async () => {
       const req = {
         body: {
-          passwd: '',
+          password: '',
         },
       } as unknown as Request;
       mockRepoUsers.search.mockRejectedValue('error');
