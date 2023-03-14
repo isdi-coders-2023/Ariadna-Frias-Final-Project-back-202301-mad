@@ -8,8 +8,9 @@ export default {
   coveragePathIgnorePatterns: [
     'index.ts',
     'app.ts',
-    'routers',
+    'router',
     'helpers/files.ts',
     'config.ts',
+    'model.ts',
   ],
 };
