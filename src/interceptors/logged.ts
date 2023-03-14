@@ -3,7 +3,7 @@ import { HTTPError } from '../errors/errors.js';
 import { Auth, PayloadToken } from '../services/auth.js';
 import createDebug from 'debug';
 
-const debug = createDebug('CH7:interceptor');
+const debug = createDebug('FINPR:interceptor');
 
 export interface PlusRequest extends Request {
   info?: PayloadToken;
