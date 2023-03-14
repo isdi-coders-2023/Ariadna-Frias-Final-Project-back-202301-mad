@@ -1,19 +1,14 @@
 import { Response, Request, NextFunction } from 'express';
 
-import { FestivalRepo, UserRepo } from '../repository/repo.interface.js';
+import { UserRepo } from '../repository/repo.interface.js';
 import { User } from '../entities/user.js';
 import createDebug from 'debug';
 import { HTTPError } from '../errors/errors.js';
 import { Auth, PayloadToken } from '../services/auth.js';
-import { PlusRequest } from '../interceptors/logged.js';
-import { Festival } from '../entities/festival.js';
 const debug = createDebug('FINPR:controller:users');
 
 export class UsersController {
-  constructor(
-    public repoUsers: UserRepo<User>,
-    public repoFestivals: FestivalRepo<Festival>
-  ) {
+  constructor(public repoUsers: UserRepo<User>) {
     debug('Instantiate');
   }
 
@@ -69,50 +64,6 @@ export class UsersController {
       resp.json({
         token,
         results: data[0],
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async addFavorite(req: PlusRequest, resp: Response, next: NextFunction) {
-    try {
-      debug('patch - add Favorite');
-      if (!req.info) {
-        throw new HTTPError(401, 'Unauthorized', 'Invalid information');
-      }
-
-      const user = await this.repoUsers.queryId(req.info.id);
-      const fav = await this.repoFestivals.queryId(req.params.id);
-      if (user.favoriteFestival.toString().includes(fav.id)) {
-        throw new HTTPError(400, 'Bad request', 'This festival already exists');
-      }
-
-      user.favoriteFestival.push(fav);
-      await this.repoUsers.update(user);
-      resp.json({
-        results: [user],
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async deleteFavorite(req: PlusRequest, resp: Response, next: NextFunction) {
-    try {
-      debug('patch - delete Favorite');
-      if (!req.info) {
-        throw new HTTPError(401, 'Unauthorized', 'Invalid information');
-      }
-
-      const user = await this.repoUsers.queryId(req.info.id);
-      const fav = await this.repoFestivals.queryId(req.params.id);
-      user.favoriteFestival = user.favoriteFestival.filter(
-        (item) => item.id.toString() !== fav.id
-      );
-      await this.repoUsers.update(user);
-      resp.json({
-        results: [user],
       });
     } catch (error) {
       next(error);
