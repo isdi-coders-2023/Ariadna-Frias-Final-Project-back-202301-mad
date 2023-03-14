@@ -18,9 +18,9 @@ jobs:
       - name: Testing in production with coverage
         run: npm run test:prod #Change for a valid npm script
         env:
-          USER: ${{ secrets.USER }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          CLUSTER: ${{ secrets.CLUSTER }}
+          DB_USER: ${{ secrets.USER }}
+          DB_PASSWORD: ${{ secrets.PASSWORD }}
+          DB_CLUSTER: ${{ secrets.CLUSTER }}
           SECRET: ${{ secrets.SECRET}}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
