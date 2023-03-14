@@ -31,9 +31,7 @@ export class UsersMongoRepo implements UserRepo<User> {
 
   async search(query: { key: string; value: unknown }) {
     debug('search method');
-    const data = await UserModel.find({ [query.key]: query.value }).populate(
-      'favoriteFestival'
-    );
+    const data = await UserModel.find({ [query.key]: query.value });
     return data;
   }
 
