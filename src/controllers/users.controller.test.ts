@@ -19,16 +19,17 @@ describe('Given the UsersController', () => {
     json: jest.fn(),
   } as unknown as Response;
 
-  const req = {} as unknown as Request;
   const next = jest.fn();
 
   describe('When the getAll method is called', () => {
     test('And all the data is OK', async () => {
+      const req = {} as unknown as Request;
       await controller.getAll(req, resp, next);
       expect(mockRepoUsers.query).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
     test('And there is an error, next function will be called', async () => {
+      const req = {} as unknown as Request;
       mockRepoUsers.query.mockRejectedValue('error');
       await controller.getAll(req, resp, next);
       expect(next).toHaveBeenCalled();
@@ -83,6 +84,31 @@ describe('Given the UsersController', () => {
       await controller.login(req, resp, next);
       expect(mockRepoUsers.search).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
+    });
+    test('There it should be an HTTPError if there is no data', async () => {
+      const req = {
+        body: {
+          email: 'test1',
+          password: 'pass',
+        },
+      } as unknown as Request;
+      (mockRepoUsers.search as jest.Mock).mockResolvedValue([]);
+      await controller.login(req, resp, next);
+      expect(mockRepoUsers.search).toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    });
+    test('Then it should throw an HTTPError if the password is wrong', async () => {
+      const req = {
+        body: {
+          email: 'pep',
+          password: 'pass',
+        },
+      } as unknown as Request;
+      Auth.compare = jest.fn().mockResolvedValue(false);
+      (mockRepoUsers.search as jest.Mock).mockResolvedValue(['test']);
+      await controller.login(req, resp, next);
+      expect(mockRepoUsers.search).toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
     });
 
     test('And the email is missing, next function will be called', async () => {
