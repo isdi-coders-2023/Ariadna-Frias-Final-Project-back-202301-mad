@@ -92,7 +92,7 @@ describe('Given the UsersController', () => {
           password: 'pass',
         },
       } as unknown as Request;
-      (mockRepoUsers.search as jest.Mock).mockResolvedValue([]);
+      mockRepoUsers.search.mockResolvedValue([]);
       await controller.login(req, resp, next);
       expect(mockRepoUsers.search).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe('Given the UsersController', () => {
         },
       } as unknown as Request;
       Auth.compare = jest.fn().mockResolvedValue(false);
-      (mockRepoUsers.search as jest.Mock).mockResolvedValue(['test']);
+      mockRepoUsers.search.mockResolvedValue(['test']);
       await controller.login(req, resp, next);
       expect(mockRepoUsers.search).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
