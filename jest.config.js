@@ -11,5 +11,6 @@ export default {
     'routers',
     'helpers/files.ts',
     'config.ts',
+    'model.ts',
   ],
 };
