@@ -89,45 +89,33 @@ describe('Given UsersMongoRepo', () => {
         name: 'test',
       });
     });
-    test('Then it should throw an error if it has a different id', () => {
-      (FestivalModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(
-        undefined
-      );
-      expect(async () =>
-        repo.update({
-          id: '1',
-          name: 'test',
-        })
-      ).rejects.toThrow();
-    });
-    test('Then it should throw an error if it has a different id', () => {
-      (FestivalModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(
-        undefined
-      );
-      expect(async () =>
-        repo.update({
-          id: '1',
-          name: 'test',
-        })
-      ).rejects.toThrowError();
-    });
-  });
-  describe('When I use delete method', () => {
-    test('Then it should delete the selected item', async () => {
-      const value = '[{ "id": "5", "name": "Test" }]';
-      (FestivalModel.findByIdAndDelete as jest.Mock).mockResolvedValue(value);
-      await repo.delete('5');
-      expect(FestivalModel.findByIdAndDelete).toHaveBeenCalled();
-    });
-  });
 
-  describe('When call the update destroy without items (error)', () => {
-    test('Then it should throw an error', async () => {
-      (FestivalModel.findByIdAndDelete as jest.Mock).mockResolvedValue(
-        undefined
-      );
-      const result = repo.delete('1');
+    test('Then it should throw an error if it has a different id', async () => {
+      (FestivalModel.findByIdAndUpdate as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockResolvedValue(undefined),
+      }));
+      const result = repo.update({
+        id: '1',
+        name: 'test',
+      });
       await expect(result).rejects.toThrow();
+      expect(FestivalModel.findByIdAndUpdate).toHaveBeenCalled();
     });
+  });
+});
+describe('When I use delete method', () => {
+  test('Then it should delete the selected item', async () => {
+    const value = '[{ "id": "5", "name": "Test" }]';
+    (FestivalModel.findByIdAndDelete as jest.Mock).mockResolvedValue(value);
+    await repo.delete('5');
+    expect(FestivalModel.findByIdAndDelete).toHaveBeenCalled();
+  });
+});
+
+describe('When call the update destroy without items (error)', () => {
+  test('Then it should throw an error', async () => {
+    (FestivalModel.findByIdAndDelete as jest.Mock).mockResolvedValue(undefined);
+    const result = repo.delete('1');
+    await expect(result).rejects.toThrow();
   });
 });
