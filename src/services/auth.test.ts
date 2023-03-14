@@ -24,8 +24,12 @@ describe('Given the auth service', () => {
       expect(jwt.verify).toHaveBeenCalled();
     });
     test('Then if it does return a string, it should throw an error', () => {
-      (jwt.verify as jest.Mock).mockReturnValue('mockPayload');
+      (jwt.verify as jest.Mock).mockResolvedValue('mockPayload');
       expect(() => Auth.verifyJWTGettingPayload('mockPayload').toThrow());
+    });
+    test('Then a error should been throw if token is NOT valid', () => {
+      (jwt.verify as jest.Mock).mockReturnValue('invalid token');
+      expect(() => Auth.verifyJWTGettingPayload('token')).toThrow();
     });
   });
 
