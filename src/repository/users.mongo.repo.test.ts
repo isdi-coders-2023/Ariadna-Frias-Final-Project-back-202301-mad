@@ -44,9 +44,7 @@ describe('Given UsersMongoRepo', () => {
   describe('When I use search method', () => {
     test('Then if it has an mock query object, it should return find resolved value', async () => {
       const mockValue = [{ id: '1' }];
-      (UserModel.find as jest.Mock).mockImplementation(() => ({
-        populate: jest.fn().mockReturnValue(mockValue),
-      }));
+      (UserModel.find as jest.Mock).mockResolvedValue(mockValue);
 
       const mockTest = {
         key: 'email',
