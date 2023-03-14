@@ -78,16 +78,17 @@ describe('Given the UsersController', () => {
         },
       } as unknown as Request;
 
-      mockRepoUsers.search.mockResolvedValue([]);
+      mockRepoUsers.search.mockResolvedValue([1]);
       Auth.compare = jest.fn().mockResolvedValue(true);
       await controller.login(req, resp, next);
-      expect(resp.status).toHaveBeenCalled();
       expect(mockRepoUsers.search).toHaveBeenCalled();
+      expect(resp.json).toHaveBeenCalled();
     });
+
     test('And the email is missing, next function will be called', async () => {
       const req = {
         body: {
-          password: 'a',
+          passwd: 'a',
         },
       } as unknown as Request;
       mockRepoUsers.search.mockRejectedValue('error');
