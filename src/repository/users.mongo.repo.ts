@@ -45,11 +45,12 @@ export class UsersMongoRepo implements UserRepo<User> {
 
   async update(info: Partial<User>): Promise<User> {
     debug('update ' + info.name);
+
     const data = await UserModel.findByIdAndUpdate(info.id, info, {
       new: true,
     }).populate('favoriteFestival');
-
-    if (!data) throw new HTTPError(404, 'Not found!', 'Not found in update!');
+    if (!data)
+      throw new HTTPError(404, 'Email not found!', 'Not found in update!');
     return data;
   }
 }
