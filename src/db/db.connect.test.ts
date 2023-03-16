@@ -1,15 +1,19 @@
-import { dbConnect } from './db.connect.js';
+import { dbConnect } from './db.connect';
 import mongoose from 'mongoose';
-import { config } from '../config.js';
-
-jest.mock('mongoose');
-describe('Given the dbConnect function', () => {
-  describe('When it is called in not test environment', () => {
-    test('Then it should call the mongoose.connect and connect with uri', async () => {
-      const { user, password, cluster, dbName } = config;
-      const uri = `mongodb+srv://${user}:${password}@${cluster}/${dbName}?retryWrites=true&w=majority`;
-      await dbConnect('env');
-      expect(mongoose.connect).toHaveBeenCalledWith(uri);
+describe('Given dbConnect function', () => {
+  describe('When NODE_ENV === test', () => {
+    test('Then it should be a connection to testing db', async () => {
+      const result = await dbConnect();
+      expect(typeof result).toBe(typeof mongoose);
+      expect(mongoose.connection.db.databaseName).toContain('Testing');
+      mongoose.disconnect();
+    });
+  });
+  describe('When NODE_ENV !== test', () => {
+    test('Then it should be a connection to testing db', async () => {
+      const result = await dbConnect('dev');
+      expect(typeof result).toBe(typeof mongoose);
+      expect(mongoose.connection.db.databaseName).not.toContain('Testing');
       mongoose.disconnect();
     });
   });
