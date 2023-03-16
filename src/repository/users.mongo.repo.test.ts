@@ -14,9 +14,7 @@ describe('Given UsersMongoRepo', () => {
   describe('When I use query method', () => {
     test('Then it should return the result of the users', async () => {
       const mockValue = [{ id: '1' }, { id: '2' }];
-      (UserModel.find as jest.Mock).mockImplementation(() => ({
-        populate: jest.fn().mockReturnValue(mockValue),
-      }));
+      (UserModel.find as jest.Mock).mockResolvedValue(mockValue);
       const result = await repo.query();
       expect(result).toEqual([{ id: '1' }, { id: '2' }]);
     });
