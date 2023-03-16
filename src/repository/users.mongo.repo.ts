@@ -12,9 +12,9 @@ export class UsersMongoRepo implements UserRepo<User> {
   }
 
   async query(): Promise<User[]> {
-    const data = await UserModel.find().populate('favoriteFestival');
+    const data = await UserModel.find();
 
-    return data;
+    return data as User[];
   }
 
   async queryId(id: string): Promise<User> {

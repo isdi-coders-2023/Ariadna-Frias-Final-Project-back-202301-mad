@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { config } from '../config.js';
+import createDebug from 'debug';
+const debug = createDebug('FINPR:connect');
 
 const { user, password, cluster, dbName } = config;
 
