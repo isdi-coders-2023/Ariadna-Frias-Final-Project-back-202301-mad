@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { CustomError, HTTPError } from '../errors/errors.js';
 import { Error } from 'mongoose';
 
-const debug = createDebug('CH7: errors middlewares');
+const debug = createDebug('FINPR: errors middlewares');
 export const errorsMiddleware = (
   error: CustomError | Error,
   _req: Request,
