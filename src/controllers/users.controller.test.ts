@@ -1,6 +1,7 @@
 import { UsersController } from './users.controller';
 import { Request, Response } from 'express';
 import { Auth } from '../services/auth';
+import { FestivalsMongoRepo } from '../repository/festivals.mongo.repo';
 
 jest.mock('../services/auth');
 describe('Given the UsersController', () => {
@@ -12,8 +13,8 @@ describe('Given the UsersController', () => {
     update: jest.fn(),
   };
 
-  const controller = new UsersController(mockRepoUsers);
-
+  const mockFestivalRepo = {} as FestivalsMongoRepo;
+  const controller = new UsersController(mockRepoUsers, mockFestivalRepo);
   const resp = {
     status: jest.fn(),
     json: jest.fn(),
@@ -28,7 +29,7 @@ describe('Given the UsersController', () => {
       expect(mockRepoUsers.query).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
-    test('And there is an error, next function will be called', async () => {
+    test('And if there is an error, next function will be called', async () => {
       const req = {} as unknown as Request;
       mockRepoUsers.query.mockRejectedValue('error');
       await controller.getAll(req, resp, next);

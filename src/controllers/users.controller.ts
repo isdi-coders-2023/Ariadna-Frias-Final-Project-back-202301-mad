@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
-
-import { UserRepo } from '../repository/repo.interface.js';
+import { Festival } from '../entities/festival.js';
+import { UserRepo, FestivalRepo } from '../repository/repo.interface.js';
 import { User } from '../entities/user.js';
 import createDebug from 'debug';
 import { HTTPError } from '../errors/errors.js';
@@ -8,7 +8,10 @@ import { Auth, PayloadToken } from '../services/auth.js';
 const debug = createDebug('FINPR:controller:users');
 
 export class UsersController {
-  constructor(public repoUsers: UserRepo<User>) {
+  constructor(
+    public repoUsers: UserRepo<User>,
+    public repoFestivals: FestivalRepo<Festival>
+  ) {
     debug('Instantiate');
   }
 
@@ -43,7 +46,9 @@ export class UsersController {
 
   async login(req: Request, resp: Response, next: NextFunction) {
     try {
-      debug('login:post', req.body.email);
+      debug('Login:post');
+      debug(req.body.email);
+      debug(req.body.password);
       if (!req.body.email || !req.body.password)
         throw new HTTPError(401, 'Unauthorized', 'Invalid Email or password');
       const data = await this.repoUsers.search({
@@ -61,6 +66,7 @@ export class UsersController {
         role: 'user',
       };
       const token = Auth.createJWT(payload);
+      debug(token);
       resp.status(202);
       resp.json({
         token,
