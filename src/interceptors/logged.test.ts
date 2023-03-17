@@ -6,14 +6,6 @@ import { logged, PlusRequest } from './logged';
 jest.mock('../services/auth');
 
 describe('Given Logged Interceptor', () => {
-  const mockRepo = {
-    query: jest.fn(),
-    queryId: jest.fn(),
-    create: jest.fn(),
-    search: jest.fn(),
-    update: jest.fn(),
-  };
-
   const req = {
     body: {},
     params: { id: '' },
