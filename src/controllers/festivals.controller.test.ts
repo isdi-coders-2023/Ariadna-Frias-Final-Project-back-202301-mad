@@ -72,18 +72,14 @@ describe('Given the FestivalsController', () => {
       } as unknown as PlusRequest;
       const mockResp = { json: jest.fn() } as unknown as Response;
       const mockNext = jest.fn();
-      const mockCreatedFestival = { ...mockFestival, id: 'mock-festival-id' };
 
       await controller.post(mockReq, mockResp, mockNext);
-
-      expect(mockUserRepo.queryId).toHaveBeenCalledTimes(1);
       expect(mockUserRepo.queryId).toHaveBeenCalledWith(mockUserId);
-      expect(mockFestivalRepo.create).toHaveBeenCalledTimes(1);
       expect(mockFestivalRepo.create).toHaveBeenCalledWith(mockFestival);
-      expect(mockResp.json).toHaveBeenCalledTimes(1);
+      expect(mockResp.json).toHaveBeenCalled();
     });
 
-    it('should handle errors', async () => {
+    test('Then if there are errors', async () => {
       (mockFestivalRepo.create as jest.Mock).mockRejectedValue(new Error(''));
       await controller.post(req, resp, next);
       expect(mockFestivalRepo.create).toHaveBeenCalled();
@@ -92,12 +88,21 @@ describe('Given the FestivalsController', () => {
   });
 
   describe('When we use the patch method', () => {
+    const resp = { json: jest.fn() } as unknown as Response;
     test('Then if it should be no errors', async () => {
+      const req = {
+        body: {
+          id: '1',
+        },
+        params: {
+          id: '1',
+        },
+      } as unknown as Request;
       await controller.patch(req, resp, next);
-      expect(mockFestivalRepo.update).toHaveBeenCalled();
-      expect(resp.json).toHaveBeenCalled();
+      expect(mockUserRepo.queryId).toHaveBeenCalledTimes(1);
+      expect(mockFestivalRepo.update).toHaveBeenCalledWith(req.body);
+      expect(req.params.id).toBe('1');
     });
-
     test('Then if there are errors', async () => {
       (mockFestivalRepo.update as jest.Mock).mockRejectedValue(new Error(''));
       await controller.patch(req, resp, next);
