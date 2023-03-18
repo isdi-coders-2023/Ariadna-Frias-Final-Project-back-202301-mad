@@ -69,8 +69,7 @@ export class UsersController {
       debug(token);
       resp.status(202);
       resp.json({
-        token,
-        results: data[0],
+        results: [token],
       });
     } catch (error) {
       next(error);
