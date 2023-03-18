@@ -5,6 +5,7 @@ import express from 'express';
 
 import { errorsMiddleware } from './middlewares/errors.middleware.js';
 import { usersRouter } from './router/users.router.js';
+import { festivalsRouter } from './router/festivals.router.js';
 
 const debug = createDebug('FINPR:app');
 export const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use('/users', usersRouter);
+app.use('/festivals', festivalsRouter);
 
 app.get('/', (_req, resp) => {
   resp.json({

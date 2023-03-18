@@ -12,13 +12,15 @@ export class FestivalsMongoRepo implements FestivalRepo<Festival> {
   }
 
   async query(): Promise<Festival[]> {
-    const data = await FestivalModel.find().populate('owner');
+    const data = await FestivalModel.find().populate('owner', { surname: 0 });
     return data;
   }
 
   async queryId(id: string): Promise<Festival> {
     debug('queryId: ' + id);
-    const data = await FestivalModel.findById(id).populate('owner');
+    const data = await FestivalModel.findById(id).populate('owner', {
+      surname: 0,
+    });
 
     if (!data)
       throw new HTTPError(
@@ -33,7 +35,7 @@ export class FestivalsMongoRepo implements FestivalRepo<Festival> {
     debug('search method');
     const data = await FestivalModel.find({
       [query.key]: query.value,
-    }).populate('owner');
+    }).populate('owner', { surname: 0 });
     return data;
   }
 
@@ -47,7 +49,7 @@ export class FestivalsMongoRepo implements FestivalRepo<Festival> {
     debug('update ' + info.name);
     const data = await FestivalModel.findByIdAndUpdate(info.id, info, {
       new: true,
-    }).populate('owner');
+    }).populate('owner', { surname: 0 });
     if (!data) throw new HTTPError(404, 'Not found!', 'Not found in update!');
     return data;
   }
