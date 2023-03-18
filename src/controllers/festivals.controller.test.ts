@@ -1,4 +1,6 @@
 import { Response, Request } from 'express';
+import { Festival } from '../entities/festival';
+import { PlusRequest } from '../interceptors/logged';
 import { FestivalsMongoRepo } from '../repository/festivals.mongo.repo';
 
 import { UsersMongoRepo } from '../repository/users.mongo.repo';
@@ -44,7 +46,7 @@ describe('Given the FestivalsController', () => {
       expect(next).toHaveBeenCalled();
     });
   });
-  describe('When we use get', () => {
+  describe('When we use the get method', () => {
     test('Then if it should be no errors', async () => {
       await controller.get(req, resp, next);
       expect(mockFestivalRepo.queryId).toHaveBeenCalled();
@@ -57,36 +59,39 @@ describe('Given the FestivalsController', () => {
       expect(next).toHaveBeenCalled();
     });
   });
+  describe('When we use the post method', () => {
+    test('Then it should create a new festival and return it', async () => {
+      const mockUserId = 'mock-user-id';
+      const mockFestival = {
+        name: 'Mock Festival',
+        owner: mockUserId,
+      } as unknown as Festival;
+      const mockReq = {
+        info: { id: mockUserId },
+        body: mockFestival,
+      } as unknown as PlusRequest;
+      const mockResp = { json: jest.fn() } as unknown as Response;
+      const mockNext = jest.fn();
+      const mockCreatedFestival = { ...mockFestival, id: 'mock-festival-id' };
 
-  describe('When we use post', () => {
-    const mockFestival = {
-      name: 'test',
-      city: 'Barcelona',
-      owner: { id: '1' },
-    };
+      await controller.post(mockReq, mockResp, mockNext);
 
-    test('Then if it should be no errors', async () => {
-      (mockFestivalRepo.create as jest.Mock).mockResolvedValue({
-        mockFestival,
-      });
-      await controller.post(req, resp, next);
-      expect(resp.json).toHaveBeenCalled();
+      expect(mockUserRepo.queryId).toHaveBeenCalledTimes(1);
+      expect(mockUserRepo.queryId).toHaveBeenCalledWith(mockUserId);
+      expect(mockFestivalRepo.create).toHaveBeenCalledTimes(1);
+      expect(mockFestivalRepo.create).toHaveBeenCalledWith(mockFestival);
+      expect(mockResp.json).toHaveBeenCalledTimes(1);
     });
-    test('Then if it should be no errors', async () => {
-      (mockUserRepo.queryId as jest.Mock).mockResolvedValue({});
 
-      await controller.post(req, resp, next);
-      expect(resp.json).toHaveBeenCalled();
-    });
-
-    test('Then if there are errors', async () => {
+    it('should handle errors', async () => {
       (mockFestivalRepo.create as jest.Mock).mockRejectedValue(new Error(''));
       await controller.post(req, resp, next);
+      expect(mockFestivalRepo.create).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
   });
 
-  describe('When we use patch', () => {
+  describe('When we use the patch method', () => {
     test('Then if it should be no errors', async () => {
       await controller.patch(req, resp, next);
       expect(mockFestivalRepo.update).toHaveBeenCalled();
@@ -99,20 +104,20 @@ describe('Given the FestivalsController', () => {
       expect(mockFestivalRepo.update).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
-  });
 
-  describe('When we use delete', () => {
-    test('Then if it should be no errors', async () => {
-      await controller.delete(req, resp, next);
-      expect(mockFestivalRepo.delete).toHaveBeenCalled();
-      expect(resp.json).toHaveBeenCalled();
-    });
+    describe('When we use the delete method', () => {
+      test('Then if it should be no errors', async () => {
+        await controller.delete(req, resp, next);
+        expect(mockFestivalRepo.delete).toHaveBeenCalled();
+        expect(resp.json).toHaveBeenCalled();
+      });
 
-    test('Then if there are errors', async () => {
-      (mockFestivalRepo.delete as jest.Mock).mockRejectedValue(new Error(''));
-      await controller.delete(req, resp, next);
-      expect(mockFestivalRepo.delete).toHaveBeenCalled();
-      expect(next).toHaveBeenCalled();
+      test('Then if there are errors', async () => {
+        (mockFestivalRepo.delete as jest.Mock).mockRejectedValue(new Error(''));
+        await controller.delete(req, resp, next);
+        expect(mockFestivalRepo.delete).toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+      });
     });
   });
 });
