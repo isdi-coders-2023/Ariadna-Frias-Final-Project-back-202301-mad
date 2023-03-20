@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { FestivalsController } from '../controllers/festivals.controller.js';
+import { authorized } from '../interceptors/authorized.js';
 import { logged } from '../interceptors/logged.js';
 
 import { FestivalsMongoRepo } from '../repository/festivals.mongo.repo.js';
@@ -26,12 +27,12 @@ festivalsRouter.post(
 festivalsRouter.patch(
   '/:id',
   logged,
-  // Authorized,
+  (req, resp, next) => authorized(req, resp, next, repoFestivals),
   festivalController.patch.bind(festivalController)
 );
 festivalsRouter.delete(
   '/:id',
   logged,
-  // Authorized,
+  (req, resp, next) => authorized(req, resp, next, repoFestivals),
   festivalController.delete.bind(festivalController)
 );
