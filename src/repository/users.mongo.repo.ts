@@ -33,6 +33,7 @@ export class UsersMongoRepo implements UserRepo<User> {
     debug('search method');
 
     const data = await UserModel.find({ [query.key]: query.value });
+
     debug(data);
     return data;
   }

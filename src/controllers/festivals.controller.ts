@@ -44,6 +44,8 @@ export class FestivalsController {
     try {
       debug('post');
       const userId = req.info?.id;
+      debug('req:', req);
+      debug('user Id:', req.info?.id);
       if (!userId) throw new HTTPError(404, 'Not found', 'Not found user id');
       await this.repoUsers.queryId(userId);
       req.body.owner = userId;

@@ -16,7 +16,7 @@ const festivalController = new FestivalsController(repoUsers, repoFestivals);
 festivalsRouter.get('/', festivalController.getAll.bind(festivalController));
 festivalsRouter.get(
   '/:id',
-  logged,
+
   festivalController.get.bind(festivalController)
 );
 festivalsRouter.post(
@@ -25,7 +25,7 @@ festivalsRouter.post(
   festivalController.post.bind(festivalController)
 );
 festivalsRouter.patch(
-  '/:id',
+  '/edit:id',
   logged,
   (req, resp, next) => authorized(req, resp, next, repoFestivals),
   festivalController.patch.bind(festivalController)
