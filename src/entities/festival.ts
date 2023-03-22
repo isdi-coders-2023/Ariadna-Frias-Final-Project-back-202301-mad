@@ -8,6 +8,6 @@ export type Festival = {
   city: string;
   country: string;
   dates: string;
-  capacity: number;
+  capacity: number | string;
   owner: User;
 };
