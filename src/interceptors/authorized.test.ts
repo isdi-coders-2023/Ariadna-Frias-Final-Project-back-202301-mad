@@ -42,13 +42,6 @@ describe('Given Authorized Interceptor', () => {
         await authorized(req, resp, next, mockRepoFestivals);
         expect(next).toHaveBeenCalledWith(expect.any(HTTPError));
       });
-
-      /* It('should call the next function with an error if an exception is thrown', async () => {
-    // Mock the `repoFestivals.queryId` method to throw an exception
-    mockRepoFestivals.queryId = jest.fn().mockRejectedValue(new Error());
-    const next = jest.fn();
-    await authorized(req, resp, next, mockRepoFestivals);
-    expect(next).toHaveBeenCalled(); */
     });
   });
 });
