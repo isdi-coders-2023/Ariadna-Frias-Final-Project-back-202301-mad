@@ -112,10 +112,26 @@ describe('When I use delete method', () => {
   });
 });
 
-describe('When call the update destroy without items (error)', () => {
+describe('When call the delete without items (error)', () => {
   test('Then it should throw an error', async () => {
     (FestivalModel.findByIdAndDelete as jest.Mock).mockResolvedValue(undefined);
     const result = repo.delete('1');
     await expect(result).rejects.toThrow();
+  });
+});
+describe('When  call the filter method', () => {
+  test('Then it should be equal to the mock value', async () => {
+    const mockFestival = { musicType: 'rock' };
+    (FestivalModel.find as jest.Mock).mockResolvedValue(mockFestival);
+    const result = await repo.filter('rock');
+    expect(FestivalModel.find).toHaveBeenCalled();
+    expect(result).toBe(mockFestival);
+  });
+
+  describe('When  call the filter method', () => {
+    test('Then it should throw an error if there is no data', async () => {
+      (FestivalModel.find as jest.Mock).mockResolvedValue(undefined);
+      expect(async () => repo.filter('')).rejects.toThrow();
+    });
   });
 });

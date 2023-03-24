@@ -14,18 +14,16 @@ describe('Given the FestivalsController', () => {
     queryId: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
+    filter: jest.fn(),
   };
 
   const mockUserRepo = {
     queryId: jest.fn(),
   } as unknown as UsersMongoRepo;
 
-  const req = {
-    body: {},
-    params: { id: '' },
-  } as unknown as Request;
   const resp = {
     json: jest.fn(),
+    status: jest.fn(),
   } as unknown as Response;
   const next = jest.fn();
 
@@ -40,6 +38,10 @@ describe('Given the FestivalsController', () => {
     });
 
     test('And if there is an error, next function will be called', async () => {
+      const req = {
+        body: {},
+        params: { id: '' },
+      } as unknown as Request;
       (mockFestivalRepo.query as jest.Mock).mockRejectedValue(new Error());
       await controller.getAll(req, resp, next);
       expect(mockFestivalRepo.query).toHaveBeenCalled();
@@ -47,6 +49,10 @@ describe('Given the FestivalsController', () => {
     });
   });
   describe('When we use the get method', () => {
+    const req = {
+      body: {},
+      params: { id: '' },
+    } as unknown as Request;
     test('Then if it should be no errors', async () => {
       await controller.get(req, resp, next);
       expect(mockFestivalRepo.queryId).toHaveBeenCalled();
@@ -80,6 +86,10 @@ describe('Given the FestivalsController', () => {
     });
 
     test('Then if there are errors', async () => {
+      const req = {
+        body: {},
+        params: { id: '' },
+      } as unknown as Request;
       (mockFestivalRepo.create as jest.Mock).mockRejectedValue(new Error(''));
       await controller.post(req, resp, next);
       expect(mockFestivalRepo.create).toHaveBeenCalled();
@@ -88,16 +98,16 @@ describe('Given the FestivalsController', () => {
   });
 
   describe('When we use the patch method', () => {
+    const req = {
+      body: {
+        id: '1',
+      },
+      params: {
+        id: '1',
+      },
+    } as unknown as Request;
     const resp = { json: jest.fn() } as unknown as Response;
     test('Then if it should be no errors', async () => {
-      const req = {
-        body: {
-          id: '1',
-        },
-        params: {
-          id: '1',
-        },
-      } as unknown as Request;
       await controller.patch(req, resp, next);
       expect(mockUserRepo.queryId).toHaveBeenCalledTimes(1);
       expect(mockFestivalRepo.update).toHaveBeenCalledWith(req.body);
@@ -109,20 +119,55 @@ describe('Given the FestivalsController', () => {
       expect(mockFestivalRepo.update).toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
+  });
 
-    describe('When we use the delete method', () => {
-      test('Then if it should be no errors', async () => {
-        await controller.delete(req, resp, next);
-        expect(mockFestivalRepo.delete).toHaveBeenCalled();
-        expect(resp.json).toHaveBeenCalled();
-      });
+  describe('When we use the delete method', () => {
+    const req = {
+      body: {},
+      params: { id: '' },
+    } as unknown as Request;
+    test('Then if it should be no errors', async () => {
+      await controller.delete(req, resp, next);
+      expect(mockFestivalRepo.delete).toHaveBeenCalled();
+      expect(resp.json).toHaveBeenCalled();
+    });
 
-      test('Then if there are errors', async () => {
-        (mockFestivalRepo.delete as jest.Mock).mockRejectedValue(new Error(''));
-        await controller.delete(req, resp, next);
-        expect(mockFestivalRepo.delete).toHaveBeenCalled();
-        expect(next).toHaveBeenCalled();
-      });
+    test('Then if there are errors', async () => {
+      (mockFestivalRepo.delete as jest.Mock).mockRejectedValue(new Error(''));
+      await controller.delete(req, resp, next);
+      expect(mockFestivalRepo.delete).toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    });
+  });
+  describe('When we use the filter method', () => {
+    test('Then if it should be no errors', async () => {
+      const req = {
+        params: {
+          musicTypeFilter: 'rock',
+        },
+      } as unknown as Request;
+      await controller.filterMusic(req, resp, next);
+      (mockFestivalRepo.filter as jest.Mock).mockResolvedValue([]);
+      expect(mockFestivalRepo.filter).toHaveBeenCalled();
+      expect(resp.json).toHaveBeenCalled();
+    });
+
+    test('Then if there are errors', async () => {
+      const req = {} as unknown as Request;
+      (mockFestivalRepo.filter as jest.Mock).mockRejectedValue(new Error(''));
+      await controller.filterMusic(req, resp, next);
+      expect(next).toHaveBeenCalled();
+    });
+
+    test('Then if there are errors', async () => {
+      const req = {
+        params: {
+          musicTypeFilter: '',
+        },
+      } as unknown as Request;
+      (mockFestivalRepo.filter as jest.Mock).mockRejectedValue(new Error(''));
+      await controller.filterMusic(req, resp, next);
+      expect(next).toHaveBeenCalled();
     });
   });
 });
