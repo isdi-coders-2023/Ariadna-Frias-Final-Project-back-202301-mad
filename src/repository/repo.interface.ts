@@ -1,5 +1,4 @@
 import { Festival } from '../entities/festival';
-import { User } from '../entities/user';
 
 export interface FestivalRepo<T> {
   query(): Promise<Festival[]>;
@@ -8,6 +7,7 @@ export interface FestivalRepo<T> {
   create(_info: Partial<Festival>): Promise<Festival>;
   update(_info: Partial<Festival>): Promise<Festival>;
   delete(_id: string): Promise<void>;
+  filter(musicType: string): Promise<Festival[]>;
 }
 
 export interface UserRepo<User> {

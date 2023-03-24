@@ -36,3 +36,7 @@ festivalsRouter.delete(
   (req, resp, next) => authorized(req, resp, next, repoFestivals),
   festivalController.delete.bind(festivalController)
 );
+festivalsRouter.get(
+  '/musicType/:musicTypeFilter',
+  festivalController.filterMusic.bind(festivalController)
+);
