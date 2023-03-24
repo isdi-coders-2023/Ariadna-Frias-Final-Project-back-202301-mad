@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import { Response, Request, NextFunction } from 'express';
 
 import { FestivalRepo, UserRepo } from '../repository/repo.interface.js';
@@ -77,6 +78,29 @@ export class FestivalsController {
       await this.repoFestivals.delete(req.params.id);
       resp.json({
         results: [],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async filterMusic(req: Request, resp: Response, next: NextFunction) {
+    try {
+      debug('filter');
+      if (!req.params.musicTypeFilter)
+        throw new HTTPError(
+          404,
+          'Not found',
+          `Filter ${req.params.musicTypeFilter} not found`
+        );
+
+      const musicFiltered = await this.repoFestivals.filter(
+        req.params.musicTypeFilter
+      );
+
+      resp.status(201);
+      resp.json({
+        results: musicFiltered,
       });
     } catch (error) {
       next(error);
