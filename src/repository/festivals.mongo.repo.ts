@@ -59,4 +59,13 @@ export class FestivalsMongoRepo implements FestivalRepo<Festival> {
     const data = await FestivalModel.findByIdAndDelete(id);
     if (!data) throw new HTTPError(404, 'Delete not possible', 'Id not found');
   }
+
+  async filter(musicTypeFilter: string): Promise<Festival[]> {
+    debug('filter');
+    const data = await FestivalModel.find({
+      musicType: musicTypeFilter,
+    });
+    if (!data) throw new HTTPError(404, 'Not found', 'Theme not found');
+    return data;
+  }
 }
