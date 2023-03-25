@@ -30,8 +30,21 @@ describe('Given the FestivalsController', () => {
   const controller = new FestivalsController(mockUserRepo, mockFestivalRepo);
 
   describe('When the getAll method is called', () => {
+    (mockFestivalRepo.query as jest.Mock).mockResolvedValue([
+      {
+        id: '1',
+        name: 'festival1',
+      },
+      {
+        id: '2',
+        name: 'festival2',
+      },
+    ]);
     test('And all the data is OK', async () => {
-      const req = {} as unknown as Request;
+      const req = {
+        query: { mockPage: 1 },
+      } as unknown as Request;
+
       await controller.getAll(req, resp, next);
       expect(mockFestivalRepo.query).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
@@ -41,6 +54,7 @@ describe('Given the FestivalsController', () => {
       const req = {
         body: {},
         params: { id: '' },
+        query: { page: 6 },
       } as unknown as Request;
       (mockFestivalRepo.query as jest.Mock).mockRejectedValue(new Error());
       await controller.getAll(req, resp, next);
