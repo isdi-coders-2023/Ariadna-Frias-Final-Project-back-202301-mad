@@ -13,6 +13,7 @@ export class FestivalsMongoRepo implements FestivalRepo<Festival> {
 
   async query(): Promise<Festival[]> {
     const data = await FestivalModel.find().populate('owner', { surname: 0 });
+
     return data;
   }
 
