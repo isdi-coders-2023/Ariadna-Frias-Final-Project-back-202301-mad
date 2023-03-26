@@ -22,7 +22,7 @@ export class FestivalsController {
       debug('getAll');
       const pageCount = req.query.page || '1';
       const pageNumber = Number(pageCount);
-      if (pageNumber < 1 || pageNumber > 5)
+      if (pageNumber < 1 || pageNumber > 10)
         throw new HTTPError(404, 'Not found a valid page', 'Wrong number page');
       const data = await this.repoFestivals.query();
       const festivalData = data.slice((pageNumber - 1) * 2, pageNumber * 2);
