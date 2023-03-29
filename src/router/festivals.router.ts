@@ -13,7 +13,11 @@ const repoUsers = new UsersMongoRepo();
 const repoFestivals = new FestivalsMongoRepo();
 const festivalController = new FestivalsController(repoUsers, repoFestivals);
 
-festivalsRouter.get('/', festivalController.getAll.bind(festivalController));
+festivalsRouter.get(
+  '/',
+
+  festivalController.getAll.bind(festivalController)
+);
 festivalsRouter.get(
   '/:id',
 
