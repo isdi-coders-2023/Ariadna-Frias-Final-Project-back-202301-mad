@@ -70,7 +70,7 @@ POST ➡️ .../users/register
 
 POST ➡️ .../users/login
 
-- Login with an existing user. The required fields will be the email and password.
+- Login with an existing user. The required fields will be the email and the password.
 
 ### FESTIVALS:
 
